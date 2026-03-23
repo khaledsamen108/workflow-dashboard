@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflow Dashboard</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0f1117;
+      --surface:  #1a1d27;
+      --surface2: #22263a;
+      --border:   #2e3250;
+      --accent:   #6c63ff;
+      --accent2:  #48cfad;
+      --danger:   #ff6b6b;
+      --warn:     #ffd93d;
+      --text:     #e8eaf6;
+      --muted:    #6b7280;
+      --radius:   10px;
+      --shadow:   0 4px 24px rgba(0,0,0,.4);
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    #sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 0 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon { font-size: 1.4rem; }
+    .nav-section-title {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      padding: 20px 20px 8px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background .15s, color .15s;
+      font-size: .9rem;
+      color: var(--muted);
+      position: relative;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active {
+      background: rgba(108,99,255,.15);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+    }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 99px;
+      font-size: .7rem;
+      padding: 1px 7px;
+      font-weight: 700;
+    }
+    .board-color-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    #add-board-btn {
+      margin: 10px 16px 0;
+      background: none;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      padding: 8px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: .85rem;
+      width: calc(100% - 32px);
+      transition: border-color .15s, color .15s;
+    }
+    #add-board-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    /* ===== MAIN ===== */
+    #main {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      min-width: 0;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-title { font-size: 1.6rem; font-weight: 700; }
+    .page-subtitle { font-size: .9rem; color: var(--muted); margin-top: 4px; }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 600;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:hover { opacity: .88; }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-danger  { background: var(--danger); color: #fff; }
+    .btn-ghost   { background: var(--surface2); color: var(--text); }
+    .btn-sm { padding: 5px 12px; font-size: .8rem; }
+
+    /* ===== STAT CARDS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .stat-value { font-size: 2rem; font-weight: 700; margin: 6px 0 2px; }
+    .stat-sub   { font-size: .78rem; color: var(--muted); }
+    .stat-card.accent  .stat-value { color: var(--accent); }
+    .stat-card.green   .stat-value { color: var(--accent2); }
+    .stat-card.warn    .stat-value { color: var(--warn); }
+    .stat-card.danger  .stat-value { color: var(--danger); }
+
+    /* ===== BOARD VIEW ===== */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .board-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .board-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+    }
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 4px 12px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--muted);
+      font-size: .8rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .filter-chip.active, .filter-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(108,99,255,.1);
+    }
+
+    /* ===== TASK LIST ===== */
+    .task-list { display: flex; flex-direction: column; gap: 10px; }
+    .task-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: border-color .2s, transform .1s;
+      cursor: default;
+    }
+    .task-card:hover { border-color: var(--accent); transform: translateX(2px); }
+    .task-card.done { opacity: .55; }
+    .task-card.done .task-title { text-decoration: line-through; }
+    .task-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 5px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s, border-color .15s;
+    }
+    .task-checkbox.checked {
+      background: var(--accent2);
+      border-color: var(--accent2);
+    }
+    .task-checkbox.checked::after { content: '✓'; color: #fff; font-size: .75rem; }
+    .task-body { flex: 1; min-width: 0; }
+    .task-title { font-size: .9rem; font-weight: 500; margin-bottom: 4px; word-break: break-word; }
+    .task-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .tag {
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: .7rem;
+      font-weight: 600;
+    }
+    .priority-high   { background: rgba(255,107,107,.15); color: var(--danger); }
+    .priority-medium { background: rgba(255,217,61,.15);  color: var(--warn); }
+    .priority-low    { background: rgba(72,207,173,.15);  color: var(--accent2); }
+    .due-tag { font-size: .72rem; color: var(--muted); }
+    .due-tag.overdue { color: var(--danger); font-weight: 600; }
+    .due-tag.soon    { color: var(--warn); }
+    .task-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 5px;
+      font-size: .9rem;
+      transition: color .15s, background .15s;
+    }
+    .icon-btn:hover { color: var(--text); background: var(--surface2); }
+    .icon-btn.del:hover { color: var(--danger); }
+
+    /* ===== ADD TASK FORM ===== */
+    .add-task-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .form-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: .875rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input.flex1 { flex: 1; min-width: 160px; }
+    select.form-input { cursor: pointer; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      width: 440px;
+      max-width: 95vw;
+      box-shadow: var(--shadow);
+    }
+    .modal h3 { font-size: 1.1rem; margin-bottom: 20px; }
+    .modal .form-group { margin-bottom: 14px; }
+    .modal label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+    .modal .form-input { width: 100%; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ===== COLOR PICKER ===== */
+    .color-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+    .color-swatch {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .15s, border-color .15s;
+    }
+    .color-swatch:hover, .color-swatch.selected { transform: scale(1.2); border-color: #fff; }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar-wrap {
+      background: var(--surface2);
+      border-radius: 99px;
+      height: 6px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .4s ease;
+    }
+
+    /* ===== DASHBOARD BOARD CARDS ===== */
+    .boards-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .board-overview-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, transform .1s;
+    }
+    .board-overview-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .boc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .boc-name { font-weight: 600; font-size: .95rem; }
+    .boc-count { font-size: .8rem; color: var(--muted); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: .95rem; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      #sidebar { display: none; }
+      #main { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo"><span class="logo-icon">⚡</span> WorkFlow</div>
+
+  <div class="nav-section-title">Overview</div>
+  <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+    📊 Dashboard
+  </div>
+  <div class="nav-item" data-page="all-tasks" onclick="navigate('all-tasks')">
+    📋 All Tasks
+    <span class="nav-badge" id="all-badge">0</span>
+  </div>
+
+  <div class="nav-section-title">Boards</div>
+  <div id="board-nav-list"></div>
+  <button id="add-board-btn" onclick="openBoardModal()">+ New Board</button>
+
+  <div class="sidebar-bottom">WorkFlow Dashboard v1.0</div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- DASHBOARD PAGE -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Good work! 👋</div>
+        <div class="page-subtitle" id="dash-date"></div>
+      </div>
+    </div>
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div style="font-size:1rem;font-weight:600;margin-bottom:14px;">Your Boards</div>
+    <div class="boards-overview" id="boards-overview"></div>
+  </div>
+
+  <!-- ALL TASKS PAGE -->
+  <div class="page" id="page-all-tasks">
+    <div class="page-header">
+      <div>
+        <div class="page-title">All Tasks</div>
+        <div class="page-subtitle">Every task across all your boards</div>
+      </div>
+    </div>
+    <div class="filter-row" style="margin-bottom:20px;" id="all-filters">
+      <button class="filter-chip active" data-filter="all"   onclick="setFilter('all',this)">All</button>
+      <button class="filter-chip"        data-filter="todo"  onclick="setFilter('todo',this)">To Do</button>
+      <button class="filter-chip"        data-filter="inprogress" onclick="setFilter('inprogress',this)">In Progress</button>
+      <button class="filter-chip"        data-filter="done"  onclick="setFilter('done',this)">Done</button>
+      <button class="filter-chip"        data-filter="high"  onclick="setFilter('high',this)">High Priority</button>
+      <button class="filter-chip"        data-filter="overdue" onclick="setFilter('overdue',this)">Overdue</button>
+    </div>
+    <div class="task-list" id="all-task-list"></div>
+  </div>
+
+  <!-- BOARD PAGE (dynamic) -->
+  <div class="page" id="page-board">
+    <div class="page-header">
+      <div>
+        <div class="page-title board-title-row">
+          <span class="board-dot" id="board-dot"></span>
+          <span id="board-page-title"></span>
+        </div>
+        <div class="page-subtitle" id="board-page-sub"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="editCurrentBoard()">✏️ Edit Board</button>
+        <button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ Add Task</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div id="board-progress-wrap" style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:4px;">
+        <span>Progress</span><span id="board-progress-label"></span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="board-progress-bar"></div></div>
+    </div>
+
+    <!-- Filter row -->
+    <div class="filter-row" style="margin-bottom:16px;" id="board-filter-row">
+      <button class="filter-chip active" data-filter="all"        onclick="setBoardFilter('all',this)">All</button>
+      <button class="filter-chip"        data-filter="todo"       onclick="setBoardFilter('todo',this)">To Do</button>
+      <button class="filter-chip"        data-filter="inprogress" onclick="setBoardFilter('inprogress',this)">In Progress</button>
+      <button class="filter-chip"        data-filter="done"       onclick="setBoardFilter('done',this)">Done</button>
+    </div>
+
+    <div class="task-list" id="board-task-list"></div>
+  </div>
+
+</main>
+
+<!-- BOARD MODAL -->
+<div class="modal-overlay" id="board-modal">
+  <div class="modal">
+    <h3 id="board-modal-title">New Board</h3>
+    <div class="form-group">
+      <label>Board Name</label>
+      <input class="form-input" id="board-name-input" placeholder="e.g. Marketing, Personal..." />
+    </div>
+    <div class="form-group">
+      <label>Color</label>
+      <div class="color-picker" id="board-color-picker"></div>
+    </div>
+    <div class="form-group">
+      <label>Description (optional)</label>
+      <input class="form-input" id="board-desc-input" placeholder="What is this board for?" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeBoardModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="delete-board-btn" onclick="deleteCurrentBoard()" style="display:none;">Delete Board</button>
+      <button class="btn btn-primary" onclick="saveBoard()">Save Board</button>
+    </div>
+  </div>
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <h3 id="task-modal-title">New Task</h3>
+    <div class="form-group">
+      <label>Task Title</label>
+      <input class="form-input" id="task-title-input" placeholder="What needs to be done?" />
+    </div>
+    <div class="form-group">
+      <label>Notes (optional)</label>
+      <input class="form-input" id="task-notes-input" placeholder="Additional details..." />
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1;">
+        <label>Priority</label>
+        <select class="form-input" id="task-priority-input">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1;">
+        <label>Status</label>
+        <select class="form-input" id="task-status-input">
+          <option value="todo">To Do</option>
+          <option value="inprogress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Due Date (optional)</label>
+      <input class="form-input" type="date" id="task-due-input" />
+    </div>
+    <div class="form-group">
+      <label>Board</label>
+      <select class="form-input" id="task-board-input"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeTaskModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="delete-task-btn" onclick="deleteCurrentTask()" style="display:none;">Delete</button>
+      <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================================================
+   STATE
+=================================================== */
+const COLORS = ['#6c63ff','#48cfad','#ff6b6b','#ffd93d','#4ecdc4','#a78bfa','#f97316','#38bdf8','#e879f9','#84cc16'];
+let state = {
+  boards: [],
+  tasks: [],
+  currentBoardId: null,
+  editingBoardId: null,
+  editingTaskId: null,
+  boardFilter: 'all',
+  allFilter: 'all',
+  selectedColor: COLORS[0],
+};
+
+/* ===================================================
+   PERSISTENCE
+=================================================== */
+function save() {
+  localStorage.setItem('wf_boards', JSON.stringify(state.boards));
+  localStorage.setItem('wf_tasks',  JSON.stringify(state.tasks));
+}
+function load() {
+  try {
+    state.boards = JSON.parse(localStorage.getItem('wf_boards')) || [];
+    state.tasks  = JSON.parse(localStorage.getItem('wf_tasks'))  || [];
+  } catch { state.boards = []; state.tasks = []; }
+  if (!state.boards.length) seedData();
+}
+
+function seedData() {
+  const b1 = uid(); const b2 = uid();
+  state.boards = [
+    { id: b1, name: 'Work', color: '#6c63ff', desc: 'Professional tasks and projects' },
+    { id: b2, name: 'Personal', color: '#48cfad', desc: 'Personal goals and errands' },
+  ];
+  const today = new Date(); const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+  const next  = new Date(today); next.setDate(today.getDate()+5);
+  state.tasks = [
+    { id: uid(), boardId: b1, title: 'Review project proposal', notes: '', priority: 'high',   status: 'todo',       due: fmtDate(tomorrow), done: false },
+    { id: uid(), boardId: b1, title: 'Update weekly report',    notes: '', priority: 'medium', status: 'inprogress', due: fmtDate(today),    done: false },
+    { id: uid(), boardId: b1, title: 'Send client follow-up',   notes: '', priority: 'high',   status: 'todo',       due: '',                done: false },
+    { id: uid(), boardId: b2, title: 'Buy groceries',           notes: '', priority: 'low',    status: 'todo',       due: '',                done: false },
+    { id: uid(), boardId: b2, title: 'Read 30 minutes',         notes: '', priority: 'low',    status: 'done',       due: '',                done: true  },
+  ];
+  save();
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function fmtDate(d) { return d.toISOString().slice(0,10); }
+
+/* ===================================================
+   NAVIGATION
+=================================================== */
+function navigate(page, boardId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  if (page === 'board' && boardId) {
+    state.currentBoardId = boardId;
+    state.boardFilter = 'all';
+    document.getElementById('page-board').classList.add('active');
+    document.querySelector(`[data-board-id="${boardId}"]`)?.classList.add('active');
+    renderBoardPage();
+  } else {
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+    if (page === 'dashboard')  renderDashboard();
+    if (page === 'all-tasks')  renderAllTasks();
+  }
+}
+
+/* ===================================================
+   SIDEBAR
+=================================================== */
+function renderSidebar() {
+  const list = document.getElementById('board-nav-list');
+  list.innerHTML = '';
+  state.boards.forEach(b => {
+    const div = document.createElement('div');
+    div.className = 'nav-item';
+    div.dataset.boardId = b.id;
+    div.onclick = () => navigate('board', b.id);
+    const count = state.tasks.filter(t => t.boardId === b.id && !t.done).length;
+    div.innerHTML = `
+      <span class="board-color-dot" style="background:${b.color}"></span>
+      ${b.name}
+      ${count ? `<span class="nav-badge" style="background:${b.color}">${count}</span>` : ''}
+    `;
+    list.appendChild(div);
+  });
+
+  // all-tasks badge
+  const pending = state.tasks.filter(t => !t.done).length;
+  document.getElementById('all-badge').textContent = pending;
+}
+
+/* ===================================================
+   DASHBOARD
+=================================================== */
+function renderDashboard() {
+  // date
+  document.getElementById('dash-date').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  const all     = state.tasks.length;
+  const done    = state.tasks.filter(t => t.done).length;
+  const pending = all - done;
+  const overdue = state.tasks.filter(t => !t.done && t.due && t.due < fmtDate(new Date())).length;
+  const inprog  = state.tasks.filter(t => t.status === 'inprogress').length;
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card accent">
+      <div class="stat-label">Total Tasks</div>
+      <div class="stat-value">${all}</div>
+      <div class="stat-sub">across ${state.boards.length} boards</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value">${done}</div>
+      <div class="stat-sub">${all ? Math.round(done/all*100) : 0}% completion rate</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">In Progress</div>
+      <div class="stat-value">${inprog}</div>
+      <div class="stat-sub">active right now</div>
+    </div>
+    <div class="stat-card danger">
+      <div class="stat-label">Overdue</div>
+      <div class="stat-value">${overdue}</div>
+      <div class="stat-sub">need attention</div>
+    </div>
+  `;
+
+  // boards overview
+  const container = document.getElementById('boards-overview');
+  container.innerHTML = '';
+  if (!state.boards.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No boards yet. Create your first board!</p></div>';
+    return;
+  }
+  state.boards.forEach(b => {
+    const tasks  = state.tasks.filter(t => t.boardId === b.id);
+    const bdone  = tasks.filter(t => t.done).length;
+    const pct    = tasks.length ? Math.round(bdone/tasks.length*100) : 0;
+    const card   = document.createElement('div');
+    card.className = 'board-overview-card';
+    card.onclick   = () => navigate('board', b.id);
+    card.innerHTML = `
+      <div class="boc-header">
+        <span class="board-dot" style="background:${b.color};width:12px;height:12px;border-radius:50%;display:inline-block;"></span>
+        <span class="boc-name">${b.name}</span>
+      </div>
+      <div class="boc-count">${tasks.length} tasks · ${bdone} done</div>
+      ${b.desc ? `<div class="boc-count" style="margin-top:4px;font-style:italic;">${b.desc}</div>` : ''}
+      <div class="progress-bar-wrap" style="margin-top:12px;">
+        <div class="progress-bar-fill" style="width:${pct}%;background:${b.color};"></div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+/* ===================================================
+   ALL TASKS
+=================================================== */
+let _allFilter = 'all';
+function setFilter(f, el) {
+  _allFilter = f;
+  document.querySelectorAll('#all-filters .filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderAllTasks();
+}
+function renderAllTasks() {
+  const today = fmtDate(new Date());
+  let tasks = [...state.tasks];
+  if (_allFilter === 'todo')       tasks = tasks.filter(t => t.status === 'todo');
+  else if (_allFilter === 'inprogress') tasks = tasks.filter(t => t.status === 'inprogress');
+  else if (_allFilter === 'done')  tasks = tasks.filter(t => t.done);
+  else if (_allFilter === 'high')  tasks = tasks.filter(t => t.priority === 'high');
+  else if (_allFilter === 'overdue') tasks = tasks.filter(t => !t.done && t.due && t.due < today);
+
+  const list = document.getElementById('all-task-list');
+  list.innerHTML = '';
+  if (!tasks.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>No tasks here.</p></div>';
+    return;
+  }
+  tasks.forEach(t => list.appendChild(buildTaskCard(t)));
+}
+
+/* ===================================================
+   BOARD PAGE
+=================================================== */
+let _boardFilter = 'all';
+function setBoardFilter(f, el) {
+  _boardFilter = f;
+  document.querySelectorAll('#board-filter-row .filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderBoardTaskList();
+}
+function renderBoardPage() {
+  const b = state.boards.find(x => x.id === state.currentBoardId);
+  if (!b) return;
+  document.getElementById('board-page-title').textContent = b.name;
+  document.getElementById('board-page-sub').textContent   = b.desc || '';
+  document.getElementById('board-dot').style.background   = b.color;
+
+  // reset filter chips
+  _boardFilter = 'all';
+  document.querySelectorAll('#board-filter-row .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('#board-filter-row [data-filter="all"]').classList.add('active');
+
+  renderBoardProgress(b);
+  renderBoardTaskList();
+}
+function renderBoardProgress(b) {
+  const tasks  = state.tasks.filter(t => t.boardId === b.id);
+  const done   = tasks.filter(t => t.done).length;
+  const pct    = tasks.length ? Math.round(done/tasks.length*100) : 0;
+  document.getElementById('board-progress-label').textContent = `${done}/${tasks.length} done`;
+  document.getElementById('board-progress-bar').style.width   = pct + '%';
+}
+function renderBoardTaskList() {
+  const b = state.boards.find(x => x.id === state.currentBoardId);
+  if (!b) return;
+  let tasks = state.tasks.filter(t => t.boardId === state.currentBoardId);
+  if (_boardFilter === 'todo')       tasks = tasks.filter(t => t.status === 'todo');
+  else if (_boardFilter === 'inprogress') tasks = tasks.filter(t => t.status === 'inprogress');
+  else if (_boardFilter === 'done')  tasks = tasks.filter(t => t.done);
+
+  const list = document.getElementById('board-task-list');
+  list.innerHTML = '';
+  if (!tasks.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No tasks here. Add one above!</p></div>';
+    return;
+  }
+  tasks.forEach(t => list.appendChild(buildTaskCard(t)));
+  renderBoardProgress(b);
+}
+
+/* ===================================================
+   TASK CARD
+=================================================== */
+function buildTaskCard(task) {
+  const card = document.createElement('div');
+  card.className = 'task-card' + (task.done ? ' done' : '');
+  card.dataset.taskId = task.id;
+
+  const today = fmtDate(new Date());
+  const tomorrow = fmtDate(new Date(Date.now() + 86400000));
+  let dueHtml = '';
+  if (task.due) {
+    let cls = 'due-tag';
+    let label = '📅 ' + task.due;
+    if (!task.done && task.due < today)       { cls += ' overdue'; label = '🔴 Overdue: ' + task.due; }
+    else if (!task.done && task.due === today) { cls += ' soon';    label = '🟡 Due today'; }
+    else if (!task.done && task.due === tomorrow) { cls += ' soon'; label = '🟡 Due tomorrow'; }
+    dueHtml = `<span class="${cls}">${label}</span>`;
+  }
+
+  const boardName = state.boards.find(b => b.id === task.boardId)?.name || '';
+  const statusLabel = { todo: 'To Do', inprogress: 'In Progress', done: 'Done' }[task.status] || '';
+
+  card.innerHTML = `
+    <div class="task-checkbox ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
+    <div class="task-body">
+      <div class="task-title">${escHtml(task.title)}</div>
+      ${task.notes ? `<div style="font-size:.78rem;color:var(--muted);margin-bottom:4px;">${escHtml(task.notes)}</div>` : ''}
+      <div class="task-meta">
+        <span class="tag priority-${task.priority}">${cap(task.priority)}</span>
+        <span class="tag" style="background:var(--surface2);color:var(--muted);">${statusLabel}</span>
+        ${boardName ? `<span class="tag" style="background:var(--surface2);color:var(--muted);">📌 ${boardName}</span>` : ''}
+        ${dueHtml}
+      </div>
+    </div>
+    <div class="task-actions">
+      <button class="icon-btn" onclick="openTaskModal('${task.id}')" title="Edit">✏️</button>
+      <button class="icon-btn del" onclick="confirmDeleteTask('${task.id}')" title="Delete">🗑️</button>
+    </div>
+  `;
+  return card;
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  t.done   = !t.done;
+  t.status = t.done ? 'done' : 'todo';
+  save();
+  refreshCurrentPage();
+  renderSidebar();
+}
+
+function confirmDeleteTask(id) {
+  if (confirm('Delete this task?')) {
+    state.tasks = state.tasks.filter(t => t.id !== id);
+    save();
+    refreshCurrentPage();
+    renderSidebar();
+  }
+}
+
+/* ===================================================
+   BOARD MODAL
+=================================================== */
+function buildColorPicker() {
+  const cp = document.getElementById('board-color-picker');
+  cp.innerHTML = '';
+  COLORS.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'color-swatch' + (c === state.selectedColor ? ' selected' : '');
+    s.style.background = c;
+    s.onclick = () => { state.selectedColor = c; buildColorPicker(); };
+    cp.appendChild(s);
+  });
+}
+
+function openBoardModal(boardId) {
+  state.editingBoardId = boardId || null;
+  const modal = document.getElementById('board-modal');
+  const b = boardId ? state.boards.find(x => x.id === boardId) : null;
+  document.getElementById('board-modal-title').textContent = b ? 'Edit Board' : 'New Board';
+  document.getElementById('board-name-input').value = b?.name || '';
+  document.getElementById('board-desc-input').value = b?.desc || '';
+  state.selectedColor = b?.color || COLORS[0];
+  document.getElementById('delete-board-btn').style.display = b ? 'inline-flex' : 'none';
+  buildColorPicker();
+  modal.classList.add('open');
+  document.getElementById('board-name-input').focus();
+}
+function closeBoardModal() { document.getElementById('board-modal').classList.remove('open'); }
+function editCurrentBoard() { openBoardModal(state.currentBoardId); }
+
+function saveBoard() {
+  const name = document.getElementById('board-name-input').value.trim();
+  if (!name) { document.getElementById('board-name-input').focus(); return; }
+  const desc  = document.getElementById('board-desc-input').value.trim();
+  const color = state.selectedColor;
+  if (state.editingBoardId) {
+    const b = state.boards.find(x => x.id === state.editingBoardId);
+    if (b) { b.name = name; b.color = color; b.desc = desc; }
+  } else {
+    state.boards.push({ id: uid(), name, color, desc });
+  }
+  save(); closeBoardModal(); renderSidebar(); refreshCurrentPage();
+}
+
+function deleteCurrentBoard() {
+  if (!confirm('Delete this board and all its tasks?')) return;
+  const id = state.editingBoardId;
+  state.boards = state.boards.filter(b => b.id !== id);
+  state.tasks  = state.tasks.filter(t => t.boardId !== id);
+  save(); closeBoardModal(); renderSidebar(); navigate('dashboard');
+}
+
+/* ===================================================
+   TASK MODAL
+=================================================== */
+function openTaskModal(taskId) {
+  state.editingTaskId = taskId || null;
+  const t = taskId ? state.tasks.find(x => x.id === taskId) : null;
+  document.getElementById('task-modal-title').textContent = t ? 'Edit Task' : 'New Task';
+  document.getElementById('task-title-input').value    = t?.title    || '';
+  document.getElementById('task-notes-input').value    = t?.notes    || '';
+  document.getElementById('task-priority-input').value = t?.priority || 'medium';
+  document.getElementById('task-status-input').value   = t?.status   || 'todo';
+  document.getElementById('task-due-input').value      = t?.due      || '';
+  document.getElementById('delete-task-btn').style.display = t ? 'inline-flex' : 'none';
+
+  // Populate board select
+  const sel = document.getElementById('task-board-input');
+  sel.innerHTML = '';
+  state.boards.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b.id; opt.textContent = b.name;
+    if ((t?.boardId || state.currentBoardId) === b.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  document.getElementById('task-modal').classList.add('open');
+  document.getElementById('task-title-input').focus();
+}
+function closeTaskModal() { document.getElementById('task-modal').classList.remove('open'); }
+
+function saveTask() {
+  const title = document.getElementById('task-title-input').value.trim();
+  if (!title) { document.getElementById('task-title-input').focus(); return; }
+  const notes    = document.getElementById('task-notes-input').value.trim();
+  const priority = document.getElementById('task-priority-input').value;
+  const status   = document.getElementById('task-status-input').value;
+  const due      = document.getElementById('task-due-input').value;
+  const boardId  = document.getElementById('task-board-input').value;
+  const done     = status === 'done';
+
+  if (state.editingTaskId) {
+    const t = state.tasks.find(x => x.id === state.editingTaskId);
+    if (t) Object.assign(t, { title, notes, priority, status, due, boardId, done });
+  } else {
+    state.tasks.push({ id: uid(), boardId, title, notes, priority, status, due, done });
+  }
+  save(); closeTaskModal(); renderSidebar(); refreshCurrentPage();
+}
+
+function deleteCurrentTask() {
+  if (!confirm('Delete this task?')) return;
+  state.tasks = state.tasks.filter(t => t.id !== state.editingTaskId);
+  save(); closeTaskModal(); renderSidebar(); refreshCurrentPage();
+}
+
+/* ===================================================
+   HELPERS
+=================================================== */
+function refreshCurrentPage() {
+  const active = document.querySelector('.page.active')?.id;
+  if (active === 'page-dashboard')  renderDashboard();
+  if (active === 'page-all-tasks')  renderAllTasks();
+  if (active === 'page-board')      renderBoardPage();
+}
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// Close modals on overlay click
+document.getElementById('board-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeBoardModal(); });
+document.getElementById('task-modal').addEventListener('click',  e => { if (e.target === e.currentTarget) closeTaskModal(); });
+
+// Enter key in modals
+document.getElementById('board-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveBoard(); });
+document.getElementById('task-title-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveTask(); });
+
+/* ===================================================
+   INIT
+=================================================== */
+load();
+renderSidebar();
+renderDashboard();
+</script>
+</body>
+</html>
