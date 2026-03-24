@@ -14,6 +14,7 @@
       --border:   #2e3250;
       --accent:   #6c63ff;
       --accent2:  #48cfad;
+      --gold:     #f5c842;
       --danger:   #ff6b6b;
       --warn:     #ffd93d;
       --text:     #e8eaf6;
@@ -31,13 +32,13 @@
 
     /* ===== SIDEBAR ===== */
     #sidebar {
-      width: 240px;
+      width: 252px;
       min-height: 100vh;
       background: var(--surface);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 24px 0;
+      padding: 0;
       position: sticky;
       top: 0;
       height: 100vh;
@@ -45,18 +46,28 @@
       flex-shrink: 0;
     }
     .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent);
-      padding: 0 20px 24px;
+      padding: 22px 20px 20px;
       border-bottom: 1px solid var(--border);
+    }
+    .logo-top {
       display: flex;
       align-items: center;
       gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .02em;
     }
-    .logo-icon { font-size: 1.4rem; }
+    .logo-icon { font-size: 1.3rem; }
+    .logo-sub {
+      font-size: .68rem;
+      color: var(--muted);
+      margin-top: 3px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
     .nav-section-title {
-      font-size: .7rem;
+      font-size: .68rem;
       text-transform: uppercase;
       letter-spacing: .1em;
       color: var(--muted);
@@ -68,16 +79,15 @@
       gap: 10px;
       padding: 10px 20px;
       cursor: pointer;
-      border-radius: 0;
       transition: background .15s, color .15s;
-      font-size: .9rem;
+      font-size: .88rem;
       color: var(--muted);
       position: relative;
     }
     .nav-item:hover { background: var(--surface2); color: var(--text); }
     .nav-item.active {
-      background: rgba(108,99,255,.15);
-      color: var(--accent);
+      background: rgba(245,200,66,.1);
+      color: var(--gold);
       font-weight: 600;
     }
     .nav-item.active::before {
@@ -85,7 +95,7 @@
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 3px;
-      background: var(--accent);
+      background: var(--gold);
       border-radius: 0 3px 3px 0;
     }
     .nav-badge {
@@ -93,15 +103,11 @@
       background: var(--accent);
       color: #fff;
       border-radius: 99px;
-      font-size: .7rem;
+      font-size: .68rem;
       padding: 1px 7px;
       font-weight: 700;
     }
-    .board-color-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .board-color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     #add-board-btn {
       margin: 10px 16px 0;
       background: none;
@@ -110,26 +116,22 @@
       padding: 8px;
       border-radius: var(--radius);
       cursor: pointer;
-      font-size: .85rem;
+      font-size: .82rem;
       width: calc(100% - 32px);
       transition: border-color .15s, color .15s;
     }
-    #add-board-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #add-board-btn:hover { border-color: var(--gold); color: var(--gold); }
     .sidebar-bottom {
       margin-top: auto;
-      padding: 16px 20px;
+      padding: 14px 20px;
       border-top: 1px solid var(--border);
-      font-size: .8rem;
+      font-size: .75rem;
       color: var(--muted);
+      line-height: 1.5;
     }
 
     /* ===== MAIN ===== */
-    #main {
-      flex: 1;
-      padding: 32px;
-      overflow-y: auto;
-      min-width: 0;
-    }
+    #main { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
     .page { display: none; }
     .page.active { display: block; }
 
@@ -142,8 +144,8 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .page-title { font-size: 1.6rem; font-weight: 700; }
-    .page-subtitle { font-size: .9rem; color: var(--muted); margin-top: 4px; }
+    .page-title { font-size: 1.55rem; font-weight: 700; }
+    .page-subtitle { font-size: .88rem; color: var(--muted); margin-top: 4px; }
 
     /* ===== BUTTONS ===== */
     .btn {
@@ -158,9 +160,9 @@
       font-weight: 600;
       transition: opacity .15s, transform .1s;
     }
-    .btn:hover { opacity: .88; }
+    .btn:hover { opacity: .85; }
     .btn:active { transform: scale(.97); }
-    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary { background: var(--gold); color: #0f1117; }
     .btn-danger  { background: var(--danger); color: #fff; }
     .btn-ghost   { background: var(--surface2); color: var(--text); }
     .btn-sm { padding: 5px 12px; font-size: .8rem; }
@@ -178,39 +180,18 @@
       border-radius: var(--radius);
       padding: 20px;
     }
-    .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .stat-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
     .stat-value { font-size: 2rem; font-weight: 700; margin: 6px 0 2px; }
-    .stat-sub   { font-size: .78rem; color: var(--muted); }
-    .stat-card.accent  .stat-value { color: var(--accent); }
+    .stat-sub   { font-size: .75rem; color: var(--muted); }
+    .stat-card.gold    .stat-value { color: var(--gold); }
     .stat-card.green   .stat-value { color: var(--accent2); }
     .stat-card.warn    .stat-value { color: var(--warn); }
     .stat-card.danger  .stat-value { color: var(--danger); }
 
-    /* ===== BOARD VIEW ===== */
-    .board-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .board-title-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .board-dot {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-    }
-    .filter-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    /* ===== FILTER CHIPS ===== */
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .filter-chip {
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 99px;
       border: 1px solid var(--border);
       background: none;
@@ -220,9 +201,9 @@
       transition: all .15s;
     }
     .filter-chip.active, .filter-chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(108,99,255,.1);
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(245,200,66,.08);
     }
 
     /* ===== TASK LIST ===== */
@@ -236,10 +217,9 @@
       align-items: flex-start;
       gap: 12px;
       transition: border-color .2s, transform .1s;
-      cursor: default;
     }
-    .task-card:hover { border-color: var(--accent); transform: translateX(2px); }
-    .task-card.done { opacity: .55; }
+    .task-card:hover { border-color: var(--gold); transform: translateX(2px); }
+    .task-card.done { opacity: .5; }
     .task-card.done .task-title { text-decoration: line-through; }
     .task-checkbox {
       width: 18px; height: 18px;
@@ -253,20 +233,12 @@
       justify-content: center;
       transition: background .15s, border-color .15s;
     }
-    .task-checkbox.checked {
-      background: var(--accent2);
-      border-color: var(--accent2);
-    }
+    .task-checkbox.checked { background: var(--accent2); border-color: var(--accent2); }
     .task-checkbox.checked::after { content: '✓'; color: #fff; font-size: .75rem; }
     .task-body { flex: 1; min-width: 0; }
     .task-title { font-size: .9rem; font-weight: 500; margin-bottom: 4px; word-break: break-word; }
     .task-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .tag {
-      padding: 2px 8px;
-      border-radius: 99px;
-      font-size: .7rem;
-      font-weight: 600;
-    }
+    .tag { padding: 2px 8px; border-radius: 99px; font-size: .7rem; font-weight: 600; }
     .priority-high   { background: rgba(255,107,107,.15); color: var(--danger); }
     .priority-medium { background: rgba(255,217,61,.15);  color: var(--warn); }
     .priority-low    { background: rgba(72,207,173,.15);  color: var(--accent2); }
@@ -275,50 +247,18 @@
     .due-tag.soon    { color: var(--warn); }
     .task-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .icon-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 5px;
-      font-size: .9rem;
-      transition: color .15s, background .15s;
+      background: none; border: none; color: var(--muted);
+      cursor: pointer; padding: 4px; border-radius: 5px;
+      font-size: .9rem; transition: color .15s, background .15s;
     }
     .icon-btn:hover { color: var(--text); background: var(--surface2); }
     .icon-btn.del:hover { color: var(--danger); }
 
-    /* ===== ADD TASK FORM ===== */
-    .add-task-form {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    .form-input {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      padding: 9px 12px;
-      font-size: .875rem;
-      outline: none;
-      transition: border-color .15s;
-    }
-    .form-input:focus { border-color: var(--accent); }
-    .form-input.flex1 { flex: 1; min-width: 160px; }
-    select.form-input { cursor: pointer; }
-
     /* ===== MODAL ===== */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.6);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.65); z-index: 1000;
+      align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal {
@@ -333,116 +273,240 @@
     .modal h3 { font-size: 1.1rem; margin-bottom: 20px; }
     .modal .form-group { margin-bottom: 14px; }
     .modal label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+    .form-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: .875rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus { border-color: var(--gold); }
     .modal .form-input { width: 100%; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    select.form-input { cursor: pointer; }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
     /* ===== COLOR PICKER ===== */
     .color-picker { display: flex; gap: 8px; flex-wrap: wrap; }
     .color-swatch {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform .15s, border-color .15s;
+      width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: transform .15s, border-color .15s;
     }
     .color-swatch:hover, .color-swatch.selected { transform: scale(1.2); border-color: #fff; }
 
     /* ===== PROGRESS BAR ===== */
-    .progress-bar-wrap {
-      background: var(--surface2);
-      border-radius: 99px;
-      height: 6px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
+    .progress-bar-wrap { background: var(--surface2); border-radius: 99px; height: 6px; overflow: hidden; }
     .progress-bar-fill {
-      height: 100%;
-      border-radius: 99px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--gold), var(--accent2));
       transition: width .4s ease;
     }
 
-    /* ===== DASHBOARD BOARD CARDS ===== */
-    .boards-overview {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
+    /* ===== BOARD OVERVIEW CARDS ===== */
+    .boards-overview { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .board-overview-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; cursor: pointer;
+      transition: border-color .2s, transform .1s;
+    }
+    .board-overview-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .boc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .boc-name   { font-weight: 600; font-size: .95rem; }
+    .boc-count  { font-size: .78rem; color: var(--muted); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: .92rem; }
+
+    /* ===== NEWS ===== */
+    .news-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .news-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .88rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color .15s, border-color .15s;
+    }
+    .news-tab:hover { color: var(--text); }
+    .news-tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 700; }
+
+    .news-grid { display: flex; flex-direction: column; gap: 14px; }
+    .news-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      cursor: pointer;
+      padding: 18px 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
       transition: border-color .2s, transform .1s;
     }
-    .board-overview-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .boc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .boc-name { font-weight: 600; font-size: .95rem; }
-    .boc-count { font-size: .8rem; color: var(--muted); }
-
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center;
-      padding: 48px 20px;
-      color: var(--muted);
+    .news-card:hover { border-color: var(--gold); transform: translateX(2px); }
+    .news-img {
+      width: 90px;
+      height: 66px;
+      border-radius: 7px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--surface2);
     }
-    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state p { font-size: .95rem; }
+    .news-img-placeholder {
+      width: 90px; height: 66px;
+      border-radius: 7px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .news-body { flex: 1; min-width: 0; }
+    .news-source-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+    .news-source {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .news-date { font-size: .7rem; color: var(--muted); }
+    .news-title {
+      font-size: .92rem;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-desc {
+      font-size: .78rem;
+      color: var(--muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .news-read-more {
+      font-size: .75rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .news-read-more:hover { color: var(--gold); }
+
+    /* Skeleton loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex; gap: 16px;
+    }
+    .sk-img  { width: 90px; height: 66px; border-radius: 7px; flex-shrink: 0; }
+    .sk-body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+    .sk-line { height: 12px; }
+    .sk-title{ height: 16px; width: 80%; }
+    .sk-short{ width: 40%; }
+
+    .news-refresh-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); padding: 6px 14px; border-radius: var(--radius);
+      cursor: pointer; font-size: .78rem; transition: all .15s;
+    }
+    .news-refresh-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .news-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .news-section-title { font-size: .85rem; color: var(--muted); }
+
+    /* ===== BOARD DOT ===== */
+    .board-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+    .board-title-row { display: flex; align-items: center; gap: 10px; }
 
     /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 640px) {
       #sidebar { display: none; }
       #main { padding: 16px; }
+      .news-img, .news-img-placeholder { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
+<!-- =================== SIDEBAR =================== -->
 <nav id="sidebar">
-  <div class="logo"><span class="logo-icon">🎯</span> Vision Board</div>
+  <div class="logo">
+    <div class="logo-top"><span class="logo-icon">🎯</span> Vision Board Tracker</div>
+    <div class="logo-sub">Your personal command center</div>
+  </div>
 
   <div class="nav-section-title">Overview</div>
-  <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
-    📊 Dashboard
-  </div>
+  <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">📊 Dashboard</div>
   <div class="nav-item" data-page="all-tasks" onclick="navigate('all-tasks')">
-    📋 All Tasks
-    <span class="nav-badge" id="all-badge">0</span>
+    📋 All Tasks <span class="nav-badge" id="all-badge">0</span>
   </div>
+
+  <div class="nav-section-title">Market Intelligence</div>
+  <div class="nav-item" data-page="news-fm" onclick="navigate('news','fm')">🏢 Facilities Management</div>
+  <div class="nav-item" data-page="news-catering" onclick="navigate('news','catering')">🍽️ Catering</div>
+  <div class="nav-item" data-page="news-resources" onclick="navigate('news','resources')">👷 Resources & Manpower</div>
 
   <div class="nav-section-title">Boards</div>
   <div id="board-nav-list"></div>
   <button id="add-board-btn" onclick="openBoardModal()">+ New Board</button>
 
-  <div class="sidebar-bottom">The Vision Board Tracker v1.0</div>
+  <div class="sidebar-bottom">
+    The Vision Board Tracker v1.1<br>
+    <span style="font-size:.68rem;">Built for KhaledSamen108</span>
+  </div>
 </nav>
 
-<!-- MAIN -->
+<!-- =================== MAIN =================== -->
 <main id="main">
 
-  <!-- DASHBOARD PAGE -->
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="page-header">
       <div>
-        <div class="page-title">Good work! 👋</div>
+        <div class="page-title">Welcome back 👋</div>
         <div class="page-subtitle" id="dash-date"></div>
       </div>
     </div>
-
     <div class="stats-grid" id="stats-grid"></div>
-
-    <div style="font-size:1rem;font-weight:600;margin-bottom:14px;">Your Boards</div>
+    <div style="font-size:1rem;font-weight:600;margin-bottom:14px;color:var(--text);">Your Boards</div>
     <div class="boards-overview" id="boards-overview"></div>
   </div>
 
-  <!-- ALL TASKS PAGE -->
+  <!-- ALL TASKS -->
   <div class="page" id="page-all-tasks">
     <div class="page-header">
       <div>
@@ -451,17 +515,17 @@
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:20px;" id="all-filters">
-      <button class="filter-chip active" data-filter="all"   onclick="setFilter('all',this)">All</button>
-      <button class="filter-chip"        data-filter="todo"  onclick="setFilter('todo',this)">To Do</button>
-      <button class="filter-chip"        data-filter="inprogress" onclick="setFilter('inprogress',this)">In Progress</button>
-      <button class="filter-chip"        data-filter="done"  onclick="setFilter('done',this)">Done</button>
-      <button class="filter-chip"        data-filter="high"  onclick="setFilter('high',this)">High Priority</button>
-      <button class="filter-chip"        data-filter="overdue" onclick="setFilter('overdue',this)">Overdue</button>
+      <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-chip" onclick="setFilter('todo',this)">To Do</button>
+      <button class="filter-chip" onclick="setFilter('inprogress',this)">In Progress</button>
+      <button class="filter-chip" onclick="setFilter('done',this)">Done</button>
+      <button class="filter-chip" onclick="setFilter('high',this)">High Priority</button>
+      <button class="filter-chip" onclick="setFilter('overdue',this)">Overdue</button>
     </div>
     <div class="task-list" id="all-task-list"></div>
   </div>
 
-  <!-- BOARD PAGE (dynamic) -->
+  <!-- BOARD PAGE -->
   <div class="page" id="page-board">
     <div class="page-header">
       <div>
@@ -472,39 +536,60 @@
         <div class="page-subtitle" id="board-page-sub"></div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-ghost btn-sm" onclick="editCurrentBoard()">✏️ Edit Board</button>
+        <button class="btn btn-ghost btn-sm" onclick="editCurrentBoard()">✏️ Edit</button>
         <button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ Add Task</button>
       </div>
     </div>
-
-    <!-- Progress -->
-    <div id="board-progress-wrap" style="margin-bottom:24px;">
-      <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:4px;">
+    <div style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:6px;">
         <span>Progress</span><span id="board-progress-label"></span>
       </div>
-      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="board-progress-bar"></div></div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="board-progress-bar" style="width:0%"></div></div>
     </div>
-
-    <!-- Filter row -->
     <div class="filter-row" style="margin-bottom:16px;" id="board-filter-row">
-      <button class="filter-chip active" data-filter="all"        onclick="setBoardFilter('all',this)">All</button>
-      <button class="filter-chip"        data-filter="todo"       onclick="setBoardFilter('todo',this)">To Do</button>
-      <button class="filter-chip"        data-filter="inprogress" onclick="setBoardFilter('inprogress',this)">In Progress</button>
-      <button class="filter-chip"        data-filter="done"       onclick="setBoardFilter('done',this)">Done</button>
+      <button class="filter-chip active" onclick="setBoardFilter('all',this)">All</button>
+      <button class="filter-chip" onclick="setBoardFilter('todo',this)">To Do</button>
+      <button class="filter-chip" onclick="setBoardFilter('inprogress',this)">In Progress</button>
+      <button class="filter-chip" onclick="setBoardFilter('done',this)">Done</button>
+    </div>
+    <div class="task-list" id="board-task-list"></div>
+  </div>
+
+  <!-- RECENT NEWS PAGE -->
+  <div class="page" id="page-news">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Recent News</div>
+        <div class="page-subtitle">Live market intelligence across your industries</div>
+      </div>
     </div>
 
-    <div class="task-list" id="board-task-list"></div>
+    <!-- Sub-tabs -->
+    <div class="news-tabs">
+      <button class="news-tab active" data-tab="fm"        onclick="switchNewsTab('fm',this)">🏢 Facilities Management</button>
+      <button class="news-tab"        data-tab="catering"  onclick="switchNewsTab('catering',this)">🍽️ Catering</button>
+      <button class="news-tab"        data-tab="resources" onclick="switchNewsTab('resources',this)">👷 Resources &amp; Manpower</button>
+    </div>
+
+    <div class="news-header-row">
+      <div class="news-section-title" id="news-section-label">Facilities Management — Market news &amp; contracts</div>
+      <button class="news-refresh-btn" onclick="refreshNews()">↻ Refresh</button>
+    </div>
+
+    <div class="news-grid" id="news-grid">
+      <!-- populated by JS -->
+    </div>
   </div>
 
 </main>
 
-<!-- BOARD MODAL -->
+<!-- =================== BOARD MODAL =================== -->
 <div class="modal-overlay" id="board-modal">
   <div class="modal">
     <h3 id="board-modal-title">New Board</h3>
     <div class="form-group">
       <label>Board Name</label>
-      <input class="form-input" id="board-name-input" placeholder="e.g. Marketing, Personal..." />
+      <input class="form-input" id="board-name-input" placeholder="e.g. My Influences, Elegance Services..." />
     </div>
     <div class="form-group">
       <label>Color</label>
@@ -522,7 +607,7 @@
   </div>
 </div>
 
-<!-- TASK MODAL -->
+<!-- =================== TASK MODAL =================== -->
 <div class="modal-overlay" id="task-modal">
   <div class="modal">
     <h3 id="task-modal-title">New Task</h3>
@@ -569,81 +654,117 @@
 </div>
 
 <script>
-/* ===================================================
+/* =======================================================
+   CONSTANTS
+======================================================= */
+const COLORS = ['#f5c842','#6c63ff','#48cfad','#ff6b6b','#4ecdc4','#a78bfa','#f97316','#38bdf8','#e879f9','#84cc16'];
+
+const NEWS_FEEDS = {
+  fm: {
+    label: 'Facilities Management — Market news & contracts',
+    icon: '🏢',
+    queries: [
+      'facilities+management+contracts+tender',
+      'facilities+management+market+news',
+      'FM+services+contracts+awarded'
+    ]
+  },
+  catering: {
+    label: 'Catering — Industry news & contracts',
+    icon: '🍽️',
+    queries: [
+      'catering+industry+news+contracts',
+      'catering+services+tender+awarded',
+      'food+service+management+news'
+    ]
+  },
+  resources: {
+    label: 'Resources — Labor, Manpower & Accommodation solutions',
+    icon: '👷',
+    queries: [
+      'manpower+solutions+labor+workforce',
+      'labor+recruitment+staffing+news',
+      'worker+accommodation+housing+solutions'
+    ]
+  }
+};
+
+/* =======================================================
    STATE
-=================================================== */
-const COLORS = ['#6c63ff','#48cfad','#ff6b6b','#ffd93d','#4ecdc4','#a78bfa','#f97316','#38bdf8','#e879f9','#84cc16'];
+======================================================= */
 let state = {
-  boards: [],
-  tasks: [],
+  boards: [], tasks: [],
   currentBoardId: null,
   editingBoardId: null,
   editingTaskId: null,
-  boardFilter: 'all',
-  allFilter: 'all',
   selectedColor: COLORS[0],
+  newsTab: 'fm',
+  newsCache: {}   // { tab: { items, fetchedAt } }
 };
 
-/* ===================================================
+/* =======================================================
    PERSISTENCE
-=================================================== */
+======================================================= */
 function save() {
-  localStorage.setItem('wf_boards', JSON.stringify(state.boards));
-  localStorage.setItem('wf_tasks',  JSON.stringify(state.tasks));
+  localStorage.setItem('vbt_boards', JSON.stringify(state.boards));
+  localStorage.setItem('vbt_tasks',  JSON.stringify(state.tasks));
 }
 function load() {
   try {
-    state.boards = JSON.parse(localStorage.getItem('wf_boards')) || [];
-    state.tasks  = JSON.parse(localStorage.getItem('wf_tasks'))  || [];
+    state.boards = JSON.parse(localStorage.getItem('vbt_boards')) || [];
+    state.tasks  = JSON.parse(localStorage.getItem('vbt_tasks'))  || [];
   } catch { state.boards = []; state.tasks = []; }
   if (!state.boards.length) seedData();
 }
-
 function seedData() {
-  const b1 = uid(); const b2 = uid();
+  const b1 = uid(), b2 = uid(), b3 = uid();
   state.boards = [
-    { id: b1, name: 'Work', color: '#6c63ff', desc: 'Professional tasks and projects' },
-    { id: b2, name: 'Personal', color: '#48cfad', desc: 'Personal goals and errands' },
+    { id: b1, name: 'Elegance Services',  color: '#f5c842', desc: 'Professional elegance service tasks' },
+    { id: b2, name: 'My Influences',      color: '#a78bfa', desc: 'Brand building and creative projects' },
+    { id: b3, name: 'Ambitions',          color: '#48cfad', desc: 'Long-term goals and vision milestones' },
   ];
-  const today = new Date(); const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
-  const next  = new Date(today); next.setDate(today.getDate()+5);
+  const td = new Date(), tm = new Date(td); tm.setDate(td.getDate()+1);
   state.tasks = [
-    { id: uid(), boardId: b1, title: 'Review project proposal', notes: '', priority: 'high',   status: 'todo',       due: fmtDate(tomorrow), done: false },
-    { id: uid(), boardId: b1, title: 'Update weekly report',    notes: '', priority: 'medium', status: 'inprogress', due: fmtDate(today),    done: false },
-    { id: uid(), boardId: b1, title: 'Send client follow-up',   notes: '', priority: 'high',   status: 'todo',       due: '',                done: false },
-    { id: uid(), boardId: b2, title: 'Buy groceries',           notes: '', priority: 'low',    status: 'todo',       due: '',                done: false },
-    { id: uid(), boardId: b2, title: 'Read 30 minutes',         notes: '', priority: 'low',    status: 'done',       due: '',                done: true  },
+    { id: uid(), boardId: b1, title: 'Review elegance service proposals',   notes: '', priority: 'high',   status: 'todo',       due: fmtDate(tm), done: false },
+    { id: uid(), boardId: b1, title: 'Follow up with facilities client',     notes: '', priority: 'high',   status: 'inprogress', due: fmtDate(td), done: false },
+    { id: uid(), boardId: b2, title: 'Plan content for My Influences brand', notes: '', priority: 'medium', status: 'todo',       due: '',          done: false },
+    { id: uid(), boardId: b2, title: 'Create social media strategy',         notes: '', priority: 'medium', status: 'inprogress', due: '',          done: false },
+    { id: uid(), boardId: b3, title: 'Define 12-month vision goals',         notes: '', priority: 'high',   status: 'todo',       due: '',          done: false },
+    { id: uid(), boardId: b3, title: 'Research new market opportunities',    notes: '', priority: 'low',    status: 'done',       due: '',          done: true  },
   ];
   save();
 }
-
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmtDate(d) { return d.toISOString().slice(0,10); }
 
-/* ===================================================
+/* =======================================================
    NAVIGATION
-=================================================== */
-function navigate(page, boardId) {
+======================================================= */
+function navigate(page, sub) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-  if (page === 'board' && boardId) {
-    state.currentBoardId = boardId;
-    state.boardFilter = 'all';
+  if (page === 'board' && sub) {
+    state.currentBoardId = sub;
     document.getElementById('page-board').classList.add('active');
-    document.querySelector(`[data-board-id="${boardId}"]`)?.classList.add('active');
+    document.querySelector(`[data-board-id="${sub}"]`)?.classList.add('active');
     renderBoardPage();
+  } else if (page === 'news') {
+    const tab = sub || state.newsTab;
+    document.getElementById('page-news').classList.add('active');
+    document.querySelector(`[data-page="news-${tab}"]`)?.classList.add('active');
+    switchNewsTab(tab, document.querySelector(`.news-tab[data-tab="${tab}"]`));
   } else {
     document.getElementById('page-' + page).classList.add('active');
     document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
-    if (page === 'dashboard')  renderDashboard();
-    if (page === 'all-tasks')  renderAllTasks();
+    if (page === 'dashboard') renderDashboard();
+    if (page === 'all-tasks') renderAllTasks();
   }
 }
 
-/* ===================================================
+/* =======================================================
    SIDEBAR
-=================================================== */
+======================================================= */
 function renderSidebar() {
   const list = document.getElementById('board-nav-list');
   list.innerHTML = '';
@@ -655,33 +776,28 @@ function renderSidebar() {
     const count = state.tasks.filter(t => t.boardId === b.id && !t.done).length;
     div.innerHTML = `
       <span class="board-color-dot" style="background:${b.color}"></span>
-      ${b.name}
+      ${escHtml(b.name)}
       ${count ? `<span class="nav-badge" style="background:${b.color}">${count}</span>` : ''}
     `;
     list.appendChild(div);
   });
-
-  // all-tasks badge
-  const pending = state.tasks.filter(t => !t.done).length;
-  document.getElementById('all-badge').textContent = pending;
+  document.getElementById('all-badge').textContent = state.tasks.filter(t => !t.done).length;
 }
 
-/* ===================================================
+/* =======================================================
    DASHBOARD
-=================================================== */
+======================================================= */
 function renderDashboard() {
-  // date
   document.getElementById('dash-date').textContent =
     new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
-  const all     = state.tasks.length;
-  const done    = state.tasks.filter(t => t.done).length;
-  const pending = all - done;
-  const overdue = state.tasks.filter(t => !t.done && t.due && t.due < fmtDate(new Date())).length;
-  const inprog  = state.tasks.filter(t => t.status === 'inprogress').length;
+  const all    = state.tasks.length;
+  const done   = state.tasks.filter(t => t.done).length;
+  const inprog = state.tasks.filter(t => t.status === 'inprogress').length;
+  const overdue= state.tasks.filter(t => !t.done && t.due && t.due < fmtDate(new Date())).length;
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card accent">
+    <div class="stat-card gold">
       <div class="stat-label">Total Tasks</div>
       <div class="stat-value">${all}</div>
       <div class="stat-sub">across ${state.boards.length} boards</div>
@@ -689,7 +805,7 @@ function renderDashboard() {
     <div class="stat-card green">
       <div class="stat-label">Completed</div>
       <div class="stat-value">${done}</div>
-      <div class="stat-sub">${all ? Math.round(done/all*100) : 0}% completion rate</div>
+      <div class="stat-sub">${all ? Math.round(done/all*100) : 0}% done</div>
     </div>
     <div class="stat-card warn">
       <div class="stat-label">In Progress</div>
@@ -703,7 +819,6 @@ function renderDashboard() {
     </div>
   `;
 
-  // boards overview
   const container = document.getElementById('boards-overview');
   container.innerHTML = '';
   if (!state.boards.length) {
@@ -711,19 +826,19 @@ function renderDashboard() {
     return;
   }
   state.boards.forEach(b => {
-    const tasks  = state.tasks.filter(t => t.boardId === b.id);
-    const bdone  = tasks.filter(t => t.done).length;
-    const pct    = tasks.length ? Math.round(bdone/tasks.length*100) : 0;
-    const card   = document.createElement('div');
+    const tasks = state.tasks.filter(t => t.boardId === b.id);
+    const bdone = tasks.filter(t => t.done).length;
+    const pct   = tasks.length ? Math.round(bdone/tasks.length*100) : 0;
+    const card  = document.createElement('div');
     card.className = 'board-overview-card';
     card.onclick   = () => navigate('board', b.id);
     card.innerHTML = `
       <div class="boc-header">
-        <span class="board-dot" style="background:${b.color};width:12px;height:12px;border-radius:50%;display:inline-block;"></span>
-        <span class="boc-name">${b.name}</span>
+        <span style="width:12px;height:12px;border-radius:50%;background:${b.color};display:inline-block;flex-shrink:0;"></span>
+        <span class="boc-name">${escHtml(b.name)}</span>
       </div>
-      <div class="boc-count">${tasks.length} tasks · ${bdone} done</div>
-      ${b.desc ? `<div class="boc-count" style="margin-top:4px;font-style:italic;">${b.desc}</div>` : ''}
+      <div class="boc-count">${tasks.length} tasks &middot; ${bdone} done &middot; ${pct}%</div>
+      ${b.desc ? `<div class="boc-count" style="margin-top:4px;font-style:italic;">${escHtml(b.desc)}</div>` : ''}
       <div class="progress-bar-wrap" style="margin-top:12px;">
         <div class="progress-bar-fill" style="width:${pct}%;background:${b.color};"></div>
       </div>
@@ -732,9 +847,9 @@ function renderDashboard() {
   });
 }
 
-/* ===================================================
+/* =======================================================
    ALL TASKS
-=================================================== */
+======================================================= */
 let _allFilter = 'all';
 function setFilter(f, el) {
   _allFilter = f;
@@ -745,24 +860,20 @@ function setFilter(f, el) {
 function renderAllTasks() {
   const today = fmtDate(new Date());
   let tasks = [...state.tasks];
-  if (_allFilter === 'todo')       tasks = tasks.filter(t => t.status === 'todo');
+  if (_allFilter === 'todo')        tasks = tasks.filter(t => t.status === 'todo');
   else if (_allFilter === 'inprogress') tasks = tasks.filter(t => t.status === 'inprogress');
-  else if (_allFilter === 'done')  tasks = tasks.filter(t => t.done);
-  else if (_allFilter === 'high')  tasks = tasks.filter(t => t.priority === 'high');
-  else if (_allFilter === 'overdue') tasks = tasks.filter(t => !t.done && t.due && t.due < today);
-
+  else if (_allFilter === 'done')   tasks = tasks.filter(t => t.done);
+  else if (_allFilter === 'high')   tasks = tasks.filter(t => t.priority === 'high');
+  else if (_allFilter === 'overdue')tasks = tasks.filter(t => !t.done && t.due && t.due < today);
   const list = document.getElementById('all-task-list');
   list.innerHTML = '';
-  if (!tasks.length) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>No tasks here.</p></div>';
-    return;
-  }
+  if (!tasks.length) { list.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>No tasks here.</p></div>'; return; }
   tasks.forEach(t => list.appendChild(buildTaskCard(t)));
 }
 
-/* ===================================================
+/* =======================================================
    BOARD PAGE
-=================================================== */
+======================================================= */
 let _boardFilter = 'all';
 function setBoardFilter(f, el) {
   _boardFilter = f;
@@ -776,19 +887,16 @@ function renderBoardPage() {
   document.getElementById('board-page-title').textContent = b.name;
   document.getElementById('board-page-sub').textContent   = b.desc || '';
   document.getElementById('board-dot').style.background   = b.color;
-
-  // reset filter chips
   _boardFilter = 'all';
   document.querySelectorAll('#board-filter-row .filter-chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('#board-filter-row [data-filter="all"]').classList.add('active');
-
+  document.querySelector('#board-filter-row .filter-chip').classList.add('active');
   renderBoardProgress(b);
   renderBoardTaskList();
 }
 function renderBoardProgress(b) {
-  const tasks  = state.tasks.filter(t => t.boardId === b.id);
-  const done   = tasks.filter(t => t.done).length;
-  const pct    = tasks.length ? Math.round(done/tasks.length*100) : 0;
+  const tasks = state.tasks.filter(t => t.boardId === b.id);
+  const done  = tasks.filter(t => t.done).length;
+  const pct   = tasks.length ? Math.round(done/tasks.length*100) : 0;
   document.getElementById('board-progress-label').textContent = `${done}/${tasks.length} done`;
   document.getElementById('board-progress-bar').style.width   = pct + '%';
 }
@@ -796,52 +904,43 @@ function renderBoardTaskList() {
   const b = state.boards.find(x => x.id === state.currentBoardId);
   if (!b) return;
   let tasks = state.tasks.filter(t => t.boardId === state.currentBoardId);
-  if (_boardFilter === 'todo')       tasks = tasks.filter(t => t.status === 'todo');
+  if (_boardFilter === 'todo')        tasks = tasks.filter(t => t.status === 'todo');
   else if (_boardFilter === 'inprogress') tasks = tasks.filter(t => t.status === 'inprogress');
-  else if (_boardFilter === 'done')  tasks = tasks.filter(t => t.done);
-
+  else if (_boardFilter === 'done')   tasks = tasks.filter(t => t.done);
   const list = document.getElementById('board-task-list');
   list.innerHTML = '';
-  if (!tasks.length) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No tasks here. Add one above!</p></div>';
-    return;
-  }
+  if (!tasks.length) { list.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No tasks here. Add one!</p></div>'; return; }
   tasks.forEach(t => list.appendChild(buildTaskCard(t)));
   renderBoardProgress(b);
 }
 
-/* ===================================================
+/* =======================================================
    TASK CARD
-=================================================== */
+======================================================= */
 function buildTaskCard(task) {
   const card = document.createElement('div');
   card.className = 'task-card' + (task.done ? ' done' : '');
-  card.dataset.taskId = task.id;
-
-  const today = fmtDate(new Date());
+  const today    = fmtDate(new Date());
   const tomorrow = fmtDate(new Date(Date.now() + 86400000));
   let dueHtml = '';
   if (task.due) {
-    let cls = 'due-tag';
-    let label = '📅 ' + task.due;
-    if (!task.done && task.due < today)       { cls += ' overdue'; label = '🔴 Overdue: ' + task.due; }
-    else if (!task.done && task.due === today) { cls += ' soon';    label = '🟡 Due today'; }
-    else if (!task.done && task.due === tomorrow) { cls += ' soon'; label = '🟡 Due tomorrow'; }
+    let cls = 'due-tag', label = '📅 ' + task.due;
+    if (!task.done && task.due < today)        { cls += ' overdue'; label = '🔴 Overdue: ' + task.due; }
+    else if (!task.done && task.due === today)  { cls += ' soon';    label = '🟡 Due today'; }
+    else if (!task.done && task.due === tomorrow){ cls += ' soon';   label = '🟡 Due tomorrow'; }
     dueHtml = `<span class="${cls}">${label}</span>`;
   }
-
-  const boardName = state.boards.find(b => b.id === task.boardId)?.name || '';
-  const statusLabel = { todo: 'To Do', inprogress: 'In Progress', done: 'Done' }[task.status] || '';
-
+  const boardName   = state.boards.find(b => b.id === task.boardId)?.name || '';
+  const statusLabel = { todo:'To Do', inprogress:'In Progress', done:'Done' }[task.status] || '';
   card.innerHTML = `
-    <div class="task-checkbox ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}')"></div>
+    <div class="task-checkbox ${task.done?'checked':''}" onclick="toggleTask('${task.id}')"></div>
     <div class="task-body">
       <div class="task-title">${escHtml(task.title)}</div>
       ${task.notes ? `<div style="font-size:.78rem;color:var(--muted);margin-bottom:4px;">${escHtml(task.notes)}</div>` : ''}
       <div class="task-meta">
         <span class="tag priority-${task.priority}">${cap(task.priority)}</span>
         <span class="tag" style="background:var(--surface2);color:var(--muted);">${statusLabel}</span>
-        ${boardName ? `<span class="tag" style="background:var(--surface2);color:var(--muted);">📌 ${boardName}</span>` : ''}
+        ${boardName ? `<span class="tag" style="background:var(--surface2);color:var(--muted);">📌 ${escHtml(boardName)}</span>` : ''}
         ${dueHtml}
       </div>
     </div>
@@ -852,29 +951,147 @@ function buildTaskCard(task) {
   `;
   return card;
 }
-
 function toggleTask(id) {
   const t = state.tasks.find(x => x.id === id);
   if (!t) return;
-  t.done   = !t.done;
-  t.status = t.done ? 'done' : 'todo';
-  save();
-  refreshCurrentPage();
-  renderSidebar();
+  t.done = !t.done; t.status = t.done ? 'done' : 'todo';
+  save(); refreshCurrentPage(); renderSidebar();
 }
-
 function confirmDeleteTask(id) {
   if (confirm('Delete this task?')) {
     state.tasks = state.tasks.filter(t => t.id !== id);
-    save();
-    refreshCurrentPage();
-    renderSidebar();
+    save(); refreshCurrentPage(); renderSidebar();
   }
 }
 
-/* ===================================================
+/* =======================================================
+   NEWS — live RSS via rss2json
+======================================================= */
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+const GNEWS    = 'https://news.google.com/rss/search?q=QUERY&hl=en-US&gl=US&ceid=US:en&num=20';
+const CACHE_MS = 30 * 60 * 1000; // 30 min
+
+function switchNewsTab(tab, el) {
+  state.newsTab = tab;
+  document.querySelectorAll('.news-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  // update sidebar active
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`[data-page="news-${tab}"]`)?.classList.add('active');
+  const cfg = NEWS_FEEDS[tab];
+  document.getElementById('news-section-label').textContent = cfg.label;
+  loadNews(tab);
+}
+
+function refreshNews() {
+  delete state.newsCache[state.newsTab];
+  loadNews(state.newsTab);
+}
+
+async function loadNews(tab) {
+  const grid = document.getElementById('news-grid');
+  const cached = state.newsCache[tab];
+  if (cached && Date.now() - cached.fetchedAt < CACHE_MS) {
+    renderNewsCards(cached.items, tab);
+    return;
+  }
+  // Show skeletons
+  grid.innerHTML = [1,2,3,4,5].map(() => `
+    <div class="skeleton-card">
+      <div class="sk-img skeleton"></div>
+      <div class="sk-body">
+        <div class="sk-line sk-short skeleton"></div>
+        <div class="sk-line sk-title skeleton"></div>
+        <div class="sk-line skeleton" style="width:95%"></div>
+        <div class="sk-line skeleton" style="width:70%"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const cfg = NEWS_FEEDS[tab];
+  const allItems = [];
+  const seen     = new Set();
+
+  try {
+    // Fetch from multiple queries in parallel
+    const fetches = cfg.queries.map(q => {
+      const rssUrl = encodeURIComponent(GNEWS.replace('QUERY', q));
+      return fetch(RSS2JSON + rssUrl)
+        .then(r => r.json())
+        .catch(() => ({ items: [] }));
+    });
+    const results = await Promise.all(fetches);
+    results.forEach(data => {
+      if (data.items) {
+        data.items.forEach(item => {
+          if (!seen.has(item.link)) {
+            seen.add(item.link);
+            allItems.push(item);
+          }
+        });
+      }
+    });
+
+    // Sort by date desc
+    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    state.newsCache[tab] = { items: allItems, fetchedAt: Date.now() };
+    renderNewsCards(allItems, tab);
+  } catch (err) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📡</div>
+        <p>Could not load news. Check your internet connection and try refreshing.</p>
+      </div>
+    `;
+  }
+}
+
+function renderNewsCards(items, tab) {
+  const grid = document.getElementById('news-grid');
+  const icon = NEWS_FEEDS[tab]?.icon || '📰';
+  if (!items.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="icon">${icon}</div><p>No articles found right now. Try refreshing.</p></div>`;
+    return;
+  }
+  grid.innerHTML = '';
+  items.slice(0, 30).forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'news-card';
+    const pubDate = item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    const source  = item.source?.name || extractDomain(item.link);
+    const desc    = stripHtml(item.description || '');
+    const imgHtml = item.thumbnail
+      ? `<img class="news-img" src="${escHtml(item.thumbnail)}" alt="" onerror="this.parentNode.innerHTML='<div class=news-img-placeholder>${icon}</div>'">`
+      : `<div class="news-img-placeholder">${icon}</div>`;
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="news-body">
+        <div class="news-source-row">
+          <span class="news-source">${escHtml(source)}</span>
+          <span class="news-date">${pubDate}</span>
+        </div>
+        <div class="news-title">${escHtml(item.title || '')}</div>
+        ${desc ? `<div class="news-desc">${escHtml(desc)}</div>` : ''}
+        <a class="news-read-more" href="${escHtml(item.link)}" target="_blank" rel="noopener">Read full article →</a>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function extractDomain(url) {
+  try { return new URL(url).hostname.replace('www.',''); } catch { return 'News'; }
+}
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+/* =======================================================
    BOARD MODAL
-=================================================== */
+======================================================= */
 function buildColorPicker() {
   const cp = document.getElementById('board-color-picker');
   cp.innerHTML = '';
@@ -886,10 +1103,8 @@ function buildColorPicker() {
     cp.appendChild(s);
   });
 }
-
 function openBoardModal(boardId) {
   state.editingBoardId = boardId || null;
-  const modal = document.getElementById('board-modal');
   const b = boardId ? state.boards.find(x => x.id === boardId) : null;
   document.getElementById('board-modal-title').textContent = b ? 'Edit Board' : 'New Board';
   document.getElementById('board-name-input').value = b?.name || '';
@@ -897,26 +1112,23 @@ function openBoardModal(boardId) {
   state.selectedColor = b?.color || COLORS[0];
   document.getElementById('delete-board-btn').style.display = b ? 'inline-flex' : 'none';
   buildColorPicker();
-  modal.classList.add('open');
+  document.getElementById('board-modal').classList.add('open');
   document.getElementById('board-name-input').focus();
 }
 function closeBoardModal() { document.getElementById('board-modal').classList.remove('open'); }
 function editCurrentBoard() { openBoardModal(state.currentBoardId); }
-
 function saveBoard() {
   const name = document.getElementById('board-name-input').value.trim();
   if (!name) { document.getElementById('board-name-input').focus(); return; }
-  const desc  = document.getElementById('board-desc-input').value.trim();
-  const color = state.selectedColor;
+  const desc = document.getElementById('board-desc-input').value.trim();
   if (state.editingBoardId) {
     const b = state.boards.find(x => x.id === state.editingBoardId);
-    if (b) { b.name = name; b.color = color; b.desc = desc; }
+    if (b) { b.name = name; b.color = state.selectedColor; b.desc = desc; }
   } else {
-    state.boards.push({ id: uid(), name, color, desc });
+    state.boards.push({ id: uid(), name, color: state.selectedColor, desc });
   }
   save(); closeBoardModal(); renderSidebar(); refreshCurrentPage();
 }
-
 function deleteCurrentBoard() {
   if (!confirm('Delete this board and all its tasks?')) return;
   const id = state.editingBoardId;
@@ -925,21 +1137,19 @@ function deleteCurrentBoard() {
   save(); closeBoardModal(); renderSidebar(); navigate('dashboard');
 }
 
-/* ===================================================
+/* =======================================================
    TASK MODAL
-=================================================== */
+======================================================= */
 function openTaskModal(taskId) {
   state.editingTaskId = taskId || null;
   const t = taskId ? state.tasks.find(x => x.id === taskId) : null;
-  document.getElementById('task-modal-title').textContent = t ? 'Edit Task' : 'New Task';
-  document.getElementById('task-title-input').value    = t?.title    || '';
-  document.getElementById('task-notes-input').value    = t?.notes    || '';
-  document.getElementById('task-priority-input').value = t?.priority || 'medium';
-  document.getElementById('task-status-input').value   = t?.status   || 'todo';
-  document.getElementById('task-due-input').value      = t?.due      || '';
+  document.getElementById('task-modal-title').textContent  = t ? 'Edit Task' : 'New Task';
+  document.getElementById('task-title-input').value        = t?.title    || '';
+  document.getElementById('task-notes-input').value        = t?.notes    || '';
+  document.getElementById('task-priority-input').value     = t?.priority || 'medium';
+  document.getElementById('task-status-input').value       = t?.status   || 'todo';
+  document.getElementById('task-due-input').value          = t?.due      || '';
   document.getElementById('delete-task-btn').style.display = t ? 'inline-flex' : 'none';
-
-  // Populate board select
   const sel = document.getElementById('task-board-input');
   sel.innerHTML = '';
   state.boards.forEach(b => {
@@ -948,12 +1158,10 @@ function openTaskModal(taskId) {
     if ((t?.boardId || state.currentBoardId) === b.id) opt.selected = true;
     sel.appendChild(opt);
   });
-
   document.getElementById('task-modal').classList.add('open');
   document.getElementById('task-title-input').focus();
 }
 function closeTaskModal() { document.getElementById('task-modal').classList.remove('open'); }
-
 function saveTask() {
   const title = document.getElementById('task-title-input').value.trim();
   if (!title) { document.getElementById('task-title-input').focus(); return; }
@@ -963,7 +1171,6 @@ function saveTask() {
   const due      = document.getElementById('task-due-input').value;
   const boardId  = document.getElementById('task-board-input').value;
   const done     = status === 'done';
-
   if (state.editingTaskId) {
     const t = state.tasks.find(x => x.id === state.editingTaskId);
     if (t) Object.assign(t, { title, notes, priority, status, due, boardId, done });
@@ -972,38 +1179,36 @@ function saveTask() {
   }
   save(); closeTaskModal(); renderSidebar(); refreshCurrentPage();
 }
-
 function deleteCurrentTask() {
   if (!confirm('Delete this task?')) return;
   state.tasks = state.tasks.filter(t => t.id !== state.editingTaskId);
   save(); closeTaskModal(); renderSidebar(); refreshCurrentPage();
 }
 
-/* ===================================================
+/* =======================================================
    HELPERS
-=================================================== */
+======================================================= */
 function refreshCurrentPage() {
   const active = document.querySelector('.page.active')?.id;
-  if (active === 'page-dashboard')  renderDashboard();
-  if (active === 'page-all-tasks')  renderAllTasks();
-  if (active === 'page-board')      renderBoardPage();
+  if (active === 'page-dashboard') renderDashboard();
+  if (active === 'page-all-tasks') renderAllTasks();
+  if (active === 'page-board')     renderBoardPage();
 }
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-// Close modals on overlay click
-document.getElementById('board-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeBoardModal(); });
-document.getElementById('task-modal').addEventListener('click',  e => { if (e.target === e.currentTarget) closeTaskModal(); });
+// Modal close on overlay click
+document.getElementById('board-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeBoardModal(); });
+document.getElementById('task-modal').addEventListener('click',  e => { if(e.target===e.currentTarget) closeTaskModal(); });
+// Enter key
+document.getElementById('board-name-input').addEventListener('keydown', e => { if(e.key==='Enter') saveBoard(); });
+document.getElementById('task-title-input').addEventListener('keydown', e => { if(e.key==='Enter') saveTask(); });
 
-// Enter key in modals
-document.getElementById('board-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveBoard(); });
-document.getElementById('task-title-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveTask(); });
-
-/* ===================================================
+/* =======================================================
    INIT
-=================================================== */
+======================================================= */
 load();
 renderSidebar();
 renderDashboard();
