@@ -1,0 +1,29 @@
+{
+  "websites": [
+    {
+      "name": "MyInfluencers",
+      "url": "https://myinfluencers.me",
+      "priority": "high"
+    },
+    {
+      "name": "Muather",
+      "url": "https://muather.me",
+      "priority": "high"
+    },
+    {
+      "name": "Rawabet",
+      "url": "https://rawabet.site",
+      "priority": "high"
+    }
+  ],
+  "analysis_areas": [
+    "ui_ux",
+    "performance",
+    "code_quality",
+    "security",
+    "accessibility",
+    "seo",
+    "mobile_responsiveness"
+  ],
+  "schedule": "daily_0800"
+}
