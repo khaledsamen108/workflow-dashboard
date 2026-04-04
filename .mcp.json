@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "lancedb-memory": {
+      "command": "node",
+      "args": ["lancedb-memory-plugin/server.js"],
+      "cwd": "."
+    }
+  }
+}
